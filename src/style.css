@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "Arrival-Regular";
+  src: url("../public/Arrival-Regular.otf");
+}
+
+body {
+  background: #0a0e1a;
+  overflow: hidden;
+  font-family: "Arrival-Regular", sans-serif;
+  cursor: none;
+}
+
+canvas {
+  display: block;
+}
