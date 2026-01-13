@@ -1,21 +1,273 @@
+@font-face {
+  font-family: "Forma-Regular";
+  src: url("../public/FormaDJRDeck-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gotham";
+  src: url("../public/Gotham-Book.otf") format("opentype");
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none !important;
 }
 
-@font-face {
-  font-family: "Arrival-Regular";
-  src: url("../public/Arrival-Regular.otf");
+*,
+*::before,
+*::after {
+  cursor: none !important;
+}
+
+html,
+body {
+  cursor: none !important;
 }
 
 body {
-  background: #0a0e1a;
+  background: rgb(4, 12, 20);
   overflow: hidden;
-  font-family: "Arrival-Regular", sans-serif;
-  cursor: none;
+  font-family: "Forma-Regular", "Arial", sans-serif;
+  cursor: none !important;
+  position: relative;
+  filter: contrast(1.05) brightness(1.02);
+
+  opacity: 1;
+  animation: none;
 }
 
-canvas {
+/* Scanlines globales: canvas + header + footer */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+
+  background: radial-gradient(
+      800px 500px at 50% 45%,
+      rgba(125, 246, 255, 0.1),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(125, 246, 255, 0.05) 0px,
+      rgba(125, 246, 255, 0.05) 1px,
+      transparent 3px,
+      transparent 7px
+    );
+
+  mix-blend-mode: screen;
+  opacity: 0.35;
+}
+
+#app {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 1.2s ease, filter 1.2s ease;
+  pointer-events: none;
+}
+
+body.boot-done #app {
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+#mdr-canvas {
+  position: fixed;
+  inset: 0;
   display: block;
+  z-index: 0;
+  filter: contrast(1.05) brightness(1.02);
+}
+
+#ui-shell {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.mdr-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 15%;
+  background: rgb(4, 12, 20);
+  border-bottom: 10px solid #7df6ff;
+  border-bottom-style: double;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  color: #7df6ff;
+}
+
+.mdr-location {
+  font-size: 32px;
+  letter-spacing: 2px;
+  padding-left: 10px;
+  text-shadow: 0 0 3px rgba(125, 246, 255, 0.5);
+}
+
+.mdr-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  border-left: 5px solid #7df6ff;
+  position: relative;
+  padding: 10px 2px;
+  gap: 20px;
+}
+
+.mdr-left::before,
+.mdr-left::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  pointer-events: none;
+}
+
+.mdr-left::before {
+  top: 0;
+  background: linear-gradient(to right, #7df6ff 80%, #0a0e14 100%);
+}
+
+.mdr-left::after {
+  bottom: 0;
+  background: linear-gradient(to right, #7df6ff 80%, #0a0e14 100%);
+}
+
+.mdr-progress {
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: #0a0e14;
+  -webkit-text-stroke: 2px #7df6ff;
+  margin-left: auto;
+  margin-right: 10px;
+  text-align: right;
+  text-shadow: 0 0 3px rgba(125, 246, 255, 0.5);
+}
+
+img {
+  filter: drop-shadow(0 0 5px rgba(125, 246, 255, 0.55));
+}
+
+/* FOOTER */
+.mdr-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: rgb(4, 12, 20);
+  border-top: 5px solid #7df6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7df6ff;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px rgba(125, 246, 255, 0.5);
+}
+
+/* BOOT OVERLAY  */
+
+#boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgb(4, 12, 20);
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  gap: 20px;
+  transition: opacity 1.2s ease;
+}
+
+#boot-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      800px 500px at 50% 50%,
+      rgba(125, 246, 255, 0.1),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(125, 246, 255, 0.05) 0px,
+      rgba(125, 246, 255, 0.05) 1px,
+      transparent 3px,
+      transparent 7px
+    );
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+#boot-overlay .boot-logo {
+  width: min(380px, 70vw);
+  opacity: 0;
+  filter: blur(100px);
+  transform: scale(0.98);
+  filter: drop-shadow(0 0 10px rgba(125, 246, 255, 0.55));
+
+  will-change: opacity, transform, filter;
+}
+
+#boot-overlay .boot-sub {
+  position: absolute;
+  top: 70%;
+
+  font-family: "Gotham", Arial, sans-serif;
+  color: #7df6ff;
+  letter-spacing: 3px;
+  font-size: 14px;
+  opacity: 0;
+
+  transform: translateY(20px);
+
+  text-shadow: 0 0 10px rgba(125, 246, 255, 0.35),
+    0 0 26px rgba(125, 246, 255, 0.18);
+  filter: blur(10px);
+  will-change: opacity, transform, filter;
+}
+
+#boot-overlay.boot-start .boot-logo {
+  animation: bootLogoIn 1.2s ease-out forwards;
+}
+
+#boot-overlay.boot-start .boot-sub {
+  animation: bootSubIn 0.9s ease-out 0.4s forwards;
+}
+
+@keyframes bootLogoIn {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@keyframes bootSubIn {
+  to {
+    opacity: 0.85;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+body.boot-done #boot-overlay {
+  opacity: 0;
+  pointer-events: none;
 }

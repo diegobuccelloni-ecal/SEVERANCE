@@ -6,16 +6,21 @@ export default class LensEffect {
     this.mouseY = window.innerHeight / 2;
     this.pressed = false;
 
-    element.addEventListener("pointermove", (e) => {
+    // Stockage des handlers pour éviter les fuites mémoire
+    this._moveHandler = (e) => {
       this.mouseX = e.clientX;
       this.mouseY = e.clientY;
-    });
-    element.addEventListener("pointerdown", () => {
+    };
+    this._downHandler = () => {
       this.pressed = true;
-    });
-    element.addEventListener("pointerup", () => {
+    };
+    this._upHandler = () => {
       this.pressed = false;
-    });
+    };
+
+    element.addEventListener("pointermove", this._moveHandler);
+    element.addEventListener("pointerdown", this._downHandler);
+    element.addEventListener("pointerup", this._upHandler);
   }
 
   dist(x1, y1, x2, y2) {
@@ -25,6 +30,8 @@ export default class LensEffect {
   }
 
   mapRange(value, low1, high1, low2, high2) {
+    // Protection contre la division par zéro
+    if (high1 === low1) return low2;
     return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
   }
 
@@ -33,6 +40,11 @@ export default class LensEffect {
       x: particle.position?.x ?? particle.x,
       y: particle.position?.y ?? particle.y,
     };
+
+    // Protection contre les valeurs invalides
+    if (!isFinite(position.x) || !isFinite(position.y)) {
+      return position;
+    }
 
     let differenceX = this.mouseX - position.x;
     let differenceY = this.mouseY - position.y;

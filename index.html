@@ -1,15 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <!-- Use an existing public asset for the favicon to avoid 404 -->
-    <link rel="icon" type="image/svg+xml" href="/cursor.svg" />
-    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="icon" type="image/svg+xml" href="public/cursor.png" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="preload" as="image" href="public/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>severance</title>
+    <title>Severance MDR Interface</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <div id="boot-overlay" aria-hidden="true">
+      <img class="boot-logo" src="public/logo.svg" alt="LUMON" />
+      <div class="boot-sub">INITIALIZING…</div>
+    </div>
+    <div id="app">
+      <canvas id="mdr-canvas"></canvas>
+
+      <div id="ui-shell">
+        <!-- Header -->
+        <div class="mdr-header">
+          <div class="mdr-left">
+            <div class="mdr-location">Cold Harbor</div>
+            <div class="mdr-progress">
+              <span id="total-progress">0%</span> Complete
+            </div>
+          </div>
+          <div class="mdr-logo">
+            <img
+              src="public/logo.svg"
+              width="180"
+              height="120"
+              alt="Lumon Logo" />
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mdr-footer">
+          <span>OxDIEGOBUCCELLONI : Ox1BACVMIDECAL</span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="src/boot.js"></script>
   </body>
 </html>
