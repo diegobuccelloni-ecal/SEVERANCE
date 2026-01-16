@@ -24,6 +24,8 @@
 html,
 body {
   cursor: none !important;
+  height: 100%;
+  width: 100%;
 }
 
 body {
@@ -33,6 +35,7 @@ body {
   cursor: none !important;
   position: relative;
   filter: contrast(1.05) brightness(1.02);
+  min-height: 100vh;
 
   opacity: 1;
   animation: none;
@@ -91,6 +94,8 @@ body.boot-done #app {
   z-index: 10;
   display: flex;
   flex-direction: column;
+  bottom: 1px;
+  height: 1100px;
 }
 
 /* HEADER */
@@ -99,7 +104,7 @@ body.boot-done #app {
   top: 0;
   left: 0;
   right: 0;
-  height: 15%;
+  height: 150px;
   background: rgb(4, 12, 20);
   border-bottom: 10px solid #7df6ff;
   border-bottom-style: double;
@@ -232,7 +237,7 @@ img {
   font-family: "Gotham", Arial, sans-serif;
   color: #7df6ff;
   letter-spacing: 3px;
-  font-size: 14px;
+  font-size: 20px;
   opacity: 0;
 
   transform: translateY(20px);
